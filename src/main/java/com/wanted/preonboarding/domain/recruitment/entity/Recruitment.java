@@ -1,5 +1,6 @@
 package com.wanted.preonboarding.domain.recruitment.entity;
 
+import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentPutRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,6 +37,13 @@ public class Recruitment {
         this.reward = reward;
         this.description = description;
         this.skill = skill;
+    }
+
+    public void update(RecruitmentPutRequestDto requestDto) {
+        this.position = requestDto.getPosition();
+        this.reward = requestDto.getReward();
+        this.description = requestDto.getDescription();
+        this.skill = requestDto.getSkill();
     }
 
 }
