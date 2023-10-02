@@ -84,4 +84,21 @@ class RecruitmentControllerTest extends IntegrationTest {
                 .content(objectMapper.writeValueAsString(request)));
     }
 
+    @Test
+    void 채용공고_삭제_성공() throws Exception {
+        //given
+        final Recruitment setup = recruitmentSetUp.save();
+        //when
+        ResultActions resultActions = requestRecruitmentDelete(setup);
+        //then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isNoContent());
+    }
+
+    private ResultActions requestRecruitmentDelete(Recruitment recruitment) throws Exception {
+        return mvc.perform(delete("/api/recruitments/{id}", recruitment.getId()));
+    }
+
+
 }
