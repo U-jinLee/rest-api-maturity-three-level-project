@@ -1,5 +1,8 @@
 package com.wanted.preonboarding.global.setup;
 
+import com.wanted.preonboarding.domain.company.entity.Company;
+import com.wanted.preonboarding.domain.company.model.Location;
+import com.wanted.preonboarding.domain.company.repository.CompanyRepository;
 import com.wanted.preonboarding.domain.recruitment.entity.Recruitment;
 import com.wanted.preonboarding.domain.recruitment.repository.RecruitmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +15,19 @@ public class RecruitmentSetUp {
 
     @Autowired
     RecruitmentRepository recruitmentRepository;
+    @Autowired
+    CompanyRepository companyRepository;
 
     public Recruitment save() {
-        final Recruitment recruitment = buildRecruitment(0);
+
+        Company company = companyRepository.save(
+                Company.builder()
+                        .name("원티드랩")
+                        .location(Location.of("한국", "서울"))
+                        .build()
+        );
+
+        final Recruitment recruitment = buildRecruitment(company.getId());
         return recruitmentRepository.save(recruitment);
     }
 
