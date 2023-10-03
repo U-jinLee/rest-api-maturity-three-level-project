@@ -1,16 +1,16 @@
 package com.wanted.preonboarding.domain.recruitment.controller;
 
-import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentPostRequestDto;
-import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentPostResponseDto;
-import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentPutRequestDto;
-import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentPutResponseDto;
+import com.wanted.preonboarding.domain.recruitment.dto.*;
 import com.wanted.preonboarding.domain.recruitment.service.RecruitmentDeleteService;
 import com.wanted.preonboarding.domain.recruitment.service.RecruitmentPostService;
+import com.wanted.preonboarding.domain.recruitment.service.RecruitmentQueryService;
 import com.wanted.preonboarding.domain.recruitment.service.RecruitmentUpdateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/recruitments")
@@ -20,6 +20,7 @@ public class RecruitmentController {
     private final RecruitmentPostService recruitmentPostService;
     private final RecruitmentUpdateService recruitmentUpdateService;
     private final RecruitmentDeleteService recruitmentDeleteService;
+    private final RecruitmentQueryService recruitmentQueryService;
 
     @PostMapping
     public ResponseEntity<RecruitmentPostResponseDto> postRecruitment(@RequestBody RecruitmentPostRequestDto requestDto) {
@@ -36,6 +37,11 @@ public class RecruitmentController {
     public ResponseEntity<Object> deleteRecruitment(@PathVariable Long id) {
         recruitmentDeleteService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<RecruitmentsGetResponseDto>> getRecruitments() {
+        return ResponseEntity.status(HttpStatus.OK).body(recruitmentQueryService.getRecruitments());
     }
 
 }
