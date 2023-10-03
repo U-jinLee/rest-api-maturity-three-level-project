@@ -43,5 +43,9 @@ public class RecruitmentController {
     public ResponseEntity<List<RecruitmentsGetResponseDto>> getRecruitments() {
         return ResponseEntity.status(HttpStatus.OK).body(recruitmentQueryService.getRecruitments());
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<RecruitmentGetResponseDto> getRecruitment(@PathVariable("id") long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(recruitmentQueryService.getRecruitment(id));
+    }
 
 }

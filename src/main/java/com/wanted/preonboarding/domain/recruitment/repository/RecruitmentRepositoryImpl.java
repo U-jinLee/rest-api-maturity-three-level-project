@@ -2,10 +2,12 @@ package com.wanted.preonboarding.domain.recruitment.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentGetResponseDto;
 import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentsGetResponseDto;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.wanted.preonboarding.domain.company.entity.QCompany.company;
 import static com.wanted.preonboarding.domain.recruitment.entity.QRecruitment.recruitment;
@@ -27,5 +29,20 @@ public class RecruitmentRepositoryImpl implements RecruitmentRepositoryCustom {
                 .from(recruitment)
                 .innerJoin(company).on(recruitment.companyId.eq(company.id))
                 .fetch();
+    }
+
+    @Override
+    public Optional<RecruitmentGetResponseDto> findRecruitmentBy(long id) {
+        return Optional.of(jpaQueryFactory.select(
+                        Projections.constructor(
+                                RecruitmentGetResponseDto.class,
+                                recruitment,
+                                company
+                        )
+                )
+                .from(recruitment)
+                .innerJoin(company).on(recruitment.companyId.eq(company.id))
+                .where(recruitment.id.eq(id))
+                .fetchOne());
     }
 }

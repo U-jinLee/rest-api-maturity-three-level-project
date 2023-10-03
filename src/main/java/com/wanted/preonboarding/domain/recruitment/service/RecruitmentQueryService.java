@@ -1,5 +1,6 @@
 package com.wanted.preonboarding.domain.recruitment.service;
 
+import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentGetResponseDto;
 import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentsGetResponseDto;
 import com.wanted.preonboarding.domain.recruitment.repository.RecruitmentRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,5 +17,10 @@ public class RecruitmentQueryService {
 
     public List<RecruitmentsGetResponseDto> getRecruitments() {
         return recruitmentRepository.findRecruitments();
+    }
+
+    public RecruitmentGetResponseDto getRecruitment(long id) {
+        return recruitmentRepository.findRecruitmentBy(id).orElseThrow(() ->
+                new IllegalArgumentException("해당하는 채용 공고가 없습니다." + id));
     }
 }

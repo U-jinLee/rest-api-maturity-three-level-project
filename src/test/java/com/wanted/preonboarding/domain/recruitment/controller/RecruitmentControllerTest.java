@@ -128,5 +128,33 @@ class RecruitmentControllerTest extends IntegrationTest {
         );
     }
 
+    @Test
+    void 채용공고_디테일_불러오기_성공() throws Exception {
+        //given
+        Recruitment saveData = recruitmentSetUp.save();
+        recruitmentSetUp.save();
+
+        //when
+        ResultActions resultActions = requestRecruitmentGet(saveData.getId());
+        //then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id").value(saveData.getId()))
+                .andExpect(jsonPath("companyName").value("원티드랩"))
+                .andExpect(jsonPath("nation").value("한국"))
+                .andExpect(jsonPath("region").value("서울"))
+                .andExpect(jsonPath("position").value(saveData.getPosition()))
+                .andExpect(jsonPath("reward").value(saveData.getReward()))
+                .andExpect(jsonPath("skill").value(saveData.getSkill()))
+                .andExpect(jsonPath("description").value(saveData.getDescription()))
+                .andExpect(jsonPath("anotherRecruitments").isArray());
+    }
+
+    private ResultActions requestRecruitmentGet(long recruitmentId) throws Exception {
+        return mvc.perform(
+                get("/api/recruitments/{id}", recruitmentId)
+        );
+    }
 
 }
