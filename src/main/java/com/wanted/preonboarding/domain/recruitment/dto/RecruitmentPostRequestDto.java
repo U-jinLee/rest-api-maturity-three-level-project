@@ -4,9 +4,11 @@ import com.wanted.preonboarding.domain.recruitment.entity.Recruitment;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class RecruitmentPostRequestDto {
 
     private Long companyId;
