@@ -31,6 +31,11 @@ public class RecruitmentSetUp {
         return recruitmentRepository.save(recruitment);
     }
 
+    public Recruitment save(Company company) {
+        final Recruitment recruitment = buildRecruitment(company.getId());
+        return recruitmentRepository.save(recruitment);
+    }
+
     private Recruitment buildRecruitment(long companyId) {
         return Recruitment.builder()
                 .companyId(companyId)

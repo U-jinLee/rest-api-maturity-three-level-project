@@ -3,8 +3,8 @@ package com.wanted.preonboarding.domain.recruitment.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentGetResponseDto;
 import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentSearchCondition;
+import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentVo;
 import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentsGetResponseDto;
 import lombok.RequiredArgsConstructor;
 
@@ -48,10 +48,10 @@ public class RecruitmentRepositoryImpl implements RecruitmentRepositoryCustom {
     }
 
     @Override
-    public Optional<RecruitmentGetResponseDto> findRecruitmentBy(long id) {
+    public Optional<RecruitmentVo> findRecruitmentBy(long id) {
         return Optional.of(jpaQueryFactory.select(
                         Projections.constructor(
-                                RecruitmentGetResponseDto.class,
+                                RecruitmentVo.class,
                                 recruitment,
                                 company
                         )

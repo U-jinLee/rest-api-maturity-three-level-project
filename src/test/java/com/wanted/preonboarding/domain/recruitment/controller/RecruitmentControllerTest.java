@@ -1,8 +1,10 @@
 package com.wanted.preonboarding.domain.recruitment.controller;
 
+import com.wanted.preonboarding.domain.company.entity.Company;
 import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentPostRequestDto;
 import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentPutRequestDto;
 import com.wanted.preonboarding.domain.recruitment.entity.Recruitment;
+import com.wanted.preonboarding.global.setup.CompanySetUp;
 import com.wanted.preonboarding.global.setup.IntegrationTest;
 import com.wanted.preonboarding.global.setup.RecruitmentSetUp;
 import org.junit.jupiter.api.Test;
@@ -17,6 +19,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class RecruitmentControllerTest extends IntegrationTest {
 
+    @Autowired
+    CompanySetUp companySetUp;
     @Autowired
     RecruitmentSetUp recruitmentSetUp;
 
@@ -170,8 +174,10 @@ class RecruitmentControllerTest extends IntegrationTest {
     @Test
     void 채용공고_디테일_불러오기_성공() throws Exception {
         //given
-        Recruitment saveData = recruitmentSetUp.save();
-        recruitmentSetUp.save();
+        Company company = companySetUp.save("원티드랩");
+        Recruitment saveData = recruitmentSetUp.save(company);
+        recruitmentSetUp.save(company);
+        recruitmentSetUp.save(company);
 
         //when
         ResultActions resultActions = requestRecruitmentGet(saveData.getId());
@@ -187,7 +193,8 @@ class RecruitmentControllerTest extends IntegrationTest {
                 .andExpect(jsonPath("reward").value(saveData.getReward()))
                 .andExpect(jsonPath("skill").value(saveData.getSkill()))
                 .andExpect(jsonPath("description").value(saveData.getDescription()))
-                .andExpect(jsonPath("anotherRecruitments").isArray());
+                .andExpect(jsonPath("anotherRecruitments").isArray())
+                .andExpect(jsonPath("anotherRecruitments").isNotEmpty());
     }
 
     private ResultActions requestRecruitmentGet(long recruitmentId) throws Exception {
