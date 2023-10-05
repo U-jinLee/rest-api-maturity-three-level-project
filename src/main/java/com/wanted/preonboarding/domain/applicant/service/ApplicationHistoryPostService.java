@@ -18,10 +18,13 @@ public class ApplicationHistoryPostService {
     private final ApplicationHistoryRepository applicationHistoryRepository;
 
     @Transactional
-    public ApplicationHistoryResponseDto postApplicationHistory(long id, ApplicationHistoryRequestDto requestDto) {
+    public ApplicationHistoryResponseDto postApplicationHistory(long applicantId, ApplicationHistoryRequestDto requestDto) {
 
-        Applicant applicant = applicantRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 지원자가 존재하지 않습니다: " + id));
+        Applicant applicant = applicantRepository.findById(applicantId).orElseThrow(() ->
+                new IllegalArgumentException("해당 지원자가 존재하지 않습니다: " + applicantId));
+
+       if (applicationHistoryRepository.existsByApplicantAndRecruitmentId(applicant, requestDto.getRecruitmentId()))
+           throw new IllegalArgumentException("이미 지원한 공고입니다: " + requestDto.getRecruitmentId());
 
         ApplicationHistory applicationHistory = applicationHistoryRepository.save(
                 ApplicationHistory.builder()
