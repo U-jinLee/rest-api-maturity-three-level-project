@@ -40,9 +40,10 @@ public class RecruitmentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<RecruitmentsGetResponseDto>> getRecruitments() {
-        return ResponseEntity.status(HttpStatus.OK).body(recruitmentQueryService.getRecruitments());
+    public ResponseEntity<List<RecruitmentsGetResponseDto>> getRecruitments(RecruitmentSearchCondition searchCondition) {
+        return ResponseEntity.status(HttpStatus.OK).body(recruitmentQueryService.getRecruitments(searchCondition));
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<RecruitmentGetResponseDto> getRecruitment(@PathVariable("id") long id) {
         return ResponseEntity.status(HttpStatus.OK).body(recruitmentQueryService.getRecruitment(id));

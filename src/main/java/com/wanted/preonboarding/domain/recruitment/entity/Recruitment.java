@@ -17,7 +17,7 @@ public class Recruitment {
     @Column(name = "company_id", nullable = false)
     private Long companyId;
 
-    @Column(name = "position")
+    @Column(name = "position", nullable = false)
     private String position;
 
     @Column(name = "reward")
@@ -27,7 +27,7 @@ public class Recruitment {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "skill")
+    @Column(name = "skill", nullable = false)
     private String skill;
 
     @Builder

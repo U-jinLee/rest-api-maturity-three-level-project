@@ -129,6 +129,45 @@ class RecruitmentControllerTest extends IntegrationTest {
     }
 
     @Test
+    void 채용공고_기술_검색_성공() throws Exception {
+        //given
+        Recruitment saveData = recruitmentSetUp.save();
+        recruitmentSetUp.save();
+
+        //when
+        ResultActions resultActions = requestRecruitmentGets("skill", "Java");
+        //then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$").isEmpty());
+    }
+    @Test
+    void 채용공고_회사_검색_성공() throws Exception {
+        //given
+        Recruitment saveData = recruitmentSetUp.save();
+        recruitmentSetUp.save();
+
+        //when
+        ResultActions resultActions = requestRecruitmentGets("company", "잡플래닛");
+        //then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$").isEmpty());
+    }
+
+
+    private ResultActions requestRecruitmentGets(String parameterName, String value) throws Exception {
+        return mvc.perform(
+                get("/api/recruitments")
+                        .param(parameterName, value)
+        );
+    }
+
+    @Test
     void 채용공고_디테일_불러오기_성공() throws Exception {
         //given
         Recruitment saveData = recruitmentSetUp.save();
