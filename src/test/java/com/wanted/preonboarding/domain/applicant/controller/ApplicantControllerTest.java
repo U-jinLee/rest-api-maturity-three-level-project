@@ -8,17 +8,19 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.context.annotation.Import;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Import(RestDocsConfiguration.class)
 @AutoConfigureRestDocs
@@ -54,12 +56,22 @@ class ApplicantControllerTest extends IntegrationTest {
                         responseFields(
                                 fieldWithPath("applicationHistoryId").description("생성된 지원이력의 id"),
                                 fieldWithPath("recruitmentId").description("지원한 채용공고의 id"),
-                                fieldWithPath("applicantId").description("지원자의 id")
+                                fieldWithPath("applicantId").description("지원자의 id"),
+                                fieldWithPath("_links.*").ignored(),
+                                fieldWithPath("_links.self.*").ignored(),
+                                fieldWithPath("_links.profile.*").ignored()
+                        ),
+                        links(
+                                linkWithRel("self").description("Link to self"),
+                                linkWithRel("profile").description("Link to profile")
                         )
                 ))
                 .andExpect(status().isCreated())
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
                 .andExpect(jsonPath("recruitmentId").value(request.getRecruitmentId()))
-                .andExpect(jsonPath("applicantId").value(applicantId));
+                .andExpect(jsonPath("applicantId").value(applicantId))
+                .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("_links.profile").exists());
     }
 
     private ResultActions requestApplicationHistory(long applicantId, ApplicationHistoryRequestDto request) throws Exception {
