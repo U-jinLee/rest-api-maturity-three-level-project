@@ -95,7 +95,7 @@ class RecruitmentControllerTest extends IntegrationTest {
                                         linkWithRel("queryRecruitments").description("Link to query recruitments"),
                                         linkWithRel("profile").description("Link to profile")
                                 )
-                ))
+                        ))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("id").exists())
                 .andExpect(jsonPath("companyId").value(companyId))
@@ -109,6 +109,51 @@ class RecruitmentControllerTest extends IntegrationTest {
                 .andExpect(jsonPath("_links.queryRecruitment").exists())
                 .andExpect(jsonPath("_links.queryRecruitments").exists())
                 .andExpect(jsonPath("_links.profile").exists());
+    }
+
+    @Test
+    void 채용공고_등록_실패() throws Exception {
+
+        //given
+        Long companyId = null;
+        String position = "";
+        Integer reward = null;
+        String description = "";
+        String skill = "";
+
+        RecruitmentPostRequestDto request =
+                RecruitmentPostRequestDto.of(companyId, position, reward, description, skill);
+
+        //when
+        ResultActions resultActions = requestRecruitmentPost(request);
+
+        //then
+        resultActions
+                .andDo(print())
+                .andDo(
+                        document("errors",
+                                requestFields(
+                                        fieldWithPath("companyId").description("회사 ID"),
+                                        fieldWithPath("position").description("채용포지션"),
+                                        fieldWithPath("reward").description("채용보상금"),
+                                        fieldWithPath("description").description("채용내용"),
+                                        fieldWithPath("skill").description("사용기술")
+                                ),
+                                responseFields(
+                                        fieldWithPath("message").description("에러메세지"),
+                                        fieldWithPath("status").description("에러상태"),
+                                        fieldWithPath("errors").description("에러내용"),
+                                        fieldWithPath("errors[].field").description("에러필드"),
+                                        fieldWithPath("errors[].value").description("에러값"),
+                                        fieldWithPath("errors[].reason").description("에러이유"),
+                                        fieldWithPath("code").description("에러코드")
+                                )
+                        ))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("message").exists())
+                .andExpect(jsonPath("status").exists())
+                .andExpect(jsonPath("errors").exists())
+                .andExpect(jsonPath("code").exists());
     }
 
     private ResultActions requestRecruitmentPost(RecruitmentPostRequestDto request) throws Exception {
@@ -288,6 +333,7 @@ class RecruitmentControllerTest extends IntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("_embedded.recruitmentsGetResponseDtoList").doesNotExist());
     }
+
     @Test
     void 채용공고_회사_검색_성공() throws Exception {
         //given
@@ -306,7 +352,7 @@ class RecruitmentControllerTest extends IntegrationTest {
 
     private ResultActions requestRecruitmentGets(String parameterName, String value) throws Exception {
         return mvc.perform(get("/api/recruitments")
-                        .param(parameterName, value)
+                .param(parameterName, value)
         );
     }
 
