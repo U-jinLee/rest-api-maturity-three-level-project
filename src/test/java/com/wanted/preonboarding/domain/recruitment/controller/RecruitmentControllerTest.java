@@ -77,10 +77,18 @@ class RecruitmentControllerTest extends IntegrationTest {
                                         fieldWithPath("skill").description("사용기술"),
                                         fieldWithPath("_links.*").ignored(),
                                         fieldWithPath("_links.self.*").ignored(),
+                                        fieldWithPath("_links.update.*").ignored(),
+                                        fieldWithPath("_links.delete.*").ignored(),
+                                        fieldWithPath("_links.queryRecruitment.*").ignored(),
+                                        fieldWithPath("_links.queryRecruitments.*").ignored(),
                                         fieldWithPath("_links.profile.*").ignored()
                                 ),
                                 links(
                                         linkWithRel("self").description("Link to self"),
+                                        linkWithRel("update").description("Link to update"),
+                                        linkWithRel("delete").description("Link to delete"),
+                                        linkWithRel("queryRecruitment").description("Link to query recruitment"),
+                                        linkWithRel("queryRecruitments").description("Link to query recruitments"),
                                         linkWithRel("profile").description("Link to profile")
                                 )
                 ))
@@ -92,6 +100,10 @@ class RecruitmentControllerTest extends IntegrationTest {
                 .andExpect(jsonPath("description").value(description))
                 .andExpect(jsonPath("skill").value(skill))
                 .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("_links.update").exists())
+                .andExpect(jsonPath("_links.delete").exists())
+                .andExpect(jsonPath("_links.queryRecruitment").exists())
+                .andExpect(jsonPath("_links.queryRecruitments").exists())
                 .andExpect(jsonPath("_links.profile").exists());
     }
 

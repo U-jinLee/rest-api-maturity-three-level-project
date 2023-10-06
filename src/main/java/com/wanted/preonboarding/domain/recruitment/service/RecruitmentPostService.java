@@ -8,6 +8,7 @@ import com.wanted.preonboarding.domain.recruitment.repository.RecruitmentReposit
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,9 +24,15 @@ public class RecruitmentPostService {
 
         Recruitment recruitment = recruitmentRepository.save(recruitmentPostRequestDto.toEntity());
 
+        WebMvcLinkBuilder link = linkTo(RecruitmentController.class)
+                .slash(recruitment.getId());
+
         return EntityModel.of(RecruitmentPostResponseDto.from(recruitment),
-                linkTo(RecruitmentController.class)
-                        .slash(recruitment.getId()).withSelfRel(),
+                link.withSelfRel(),
+                link.withRel("delete"),
+                link.withRel("update"),
+                linkTo(RecruitmentController.class).withRel("queryRecruitments"),
+                link.withRel("queryRecruitment"),
                 Link.of("/docs/index.html#resources-recruitments-create").withRel("profile")
         );
 
