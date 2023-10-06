@@ -8,7 +8,8 @@ import lombok.Getter;
 public enum ErrorCode {
 
     ENTITY_NOT_FOUND(400, "C001", " Entity Not Found"),
-    INVALID_INPUT_VALUE(400, "C002", " Invalid Input Value");
+    INVALID_INPUT_VALUE(400, "C002", " Invalid Input Value"),
+    INVALID_TYPE_VALUE(400, "C002", " Invalid Input Value");
 
     private final String code;
     private final String message;
