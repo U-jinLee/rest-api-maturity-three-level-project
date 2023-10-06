@@ -12,6 +12,8 @@ import com.wanted.preonboarding.domain.recruitment.service.RecruitmentPostServic
 import com.wanted.preonboarding.domain.recruitment.service.RecruitmentQueryService;
 import com.wanted.preonboarding.domain.recruitment.service.RecruitmentUpdateService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.LinkRelation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,10 +33,10 @@ public class RecruitmentController {
     private final RecruitmentQueryService recruitmentQueryService;
 
     @PostMapping
-    public ResponseEntity<RecruitmentPostResponseDto> postRecruitment(@RequestBody RecruitmentPostRequestDto requestDto) {
-        RecruitmentPostResponseDto result = recruitmentPostService.post(requestDto);
+    public ResponseEntity<EntityModel<RecruitmentPostResponseDto>> postRecruitment(@RequestBody RecruitmentPostRequestDto requestDto) {
+        EntityModel<RecruitmentPostResponseDto> result = recruitmentPostService.post(requestDto);
         return ResponseEntity
-                .created(linkTo(RecruitmentController.class).slash(result.getId()).toUri())
+                .created(result.getLink(LinkRelation.of("self")).get().toUri())
                 .body(result);
     }
 

@@ -18,6 +18,8 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -72,7 +74,14 @@ class RecruitmentControllerTest extends IntegrationTest {
                                         fieldWithPath("position").description("채용포지션"),
                                         fieldWithPath("reward").description("채용보상금"),
                                         fieldWithPath("description").description("채용내용"),
-                                        fieldWithPath("skill").description("사용기술")
+                                        fieldWithPath("skill").description("사용기술"),
+                                        fieldWithPath("_links.*").ignored(),
+                                        fieldWithPath("_links.self.*").ignored(),
+                                        fieldWithPath("_links.profile.*").ignored()
+                                ),
+                                links(
+                                        linkWithRel("self").description("Link to self"),
+                                        linkWithRel("profile").description("Link to profile")
                                 )
                 ))
                 .andExpect(status().isCreated())
@@ -81,7 +90,9 @@ class RecruitmentControllerTest extends IntegrationTest {
                 .andExpect(jsonPath("position").value(position))
                 .andExpect(jsonPath("reward").value(reward))
                 .andExpect(jsonPath("description").value(description))
-                .andExpect(jsonPath("skill").value(skill));
+                .andExpect(jsonPath("skill").value(skill))
+                .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("_links.profile").exists());
     }
 
     private ResultActions requestRecruitmentPost(RecruitmentPostRequestDto request) throws Exception {
