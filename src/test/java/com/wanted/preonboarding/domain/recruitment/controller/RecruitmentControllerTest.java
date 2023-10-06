@@ -1,22 +1,32 @@
 package com.wanted.preonboarding.domain.recruitment.controller;
 
 import com.wanted.preonboarding.domain.company.entity.Company;
-import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentPostRequestDto;
-import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentPutRequestDto;
+import com.wanted.preonboarding.domain.recruitment.dto.request.RecruitmentPostRequestDto;
+import com.wanted.preonboarding.domain.recruitment.dto.request.RecruitmentPutRequestDto;
 import com.wanted.preonboarding.domain.recruitment.entity.Recruitment;
+import com.wanted.preonboarding.global.IntegrationTest;
+import com.wanted.preonboarding.global.config.RestDocsConfiguration;
 import com.wanted.preonboarding.global.setup.CompanySetUp;
-import com.wanted.preonboarding.global.setup.IntegrationTest;
 import com.wanted.preonboarding.global.setup.RecruitmentSetUp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Import(RestDocsConfiguration.class)
+@AutoConfigureRestDocs
 class RecruitmentControllerTest extends IntegrationTest {
 
     @Autowired
@@ -43,6 +53,28 @@ class RecruitmentControllerTest extends IntegrationTest {
         //then
         resultActions
                 .andDo(print())
+                .andDo(
+                        document("post-recruitment",
+                                requestFields(
+                                        fieldWithPath("companyId").description("회사 ID"),
+                                        fieldWithPath("position").description("채용포지션"),
+                                        fieldWithPath("reward").description("채용보상금"),
+                                        fieldWithPath("description").description("채용내용"),
+                                        fieldWithPath("skill").description("사용기술")
+                                ),
+                                responseHeaders(
+                                        headerWithName(HttpHeaders.LOCATION).description("Location header"),
+                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("content type header")
+                                ),
+                                responseFields(
+                                        fieldWithPath("id").description("채용공고 ID"),
+                                        fieldWithPath("companyId").description("회사 ID"),
+                                        fieldWithPath("position").description("채용포지션"),
+                                        fieldWithPath("reward").description("채용보상금"),
+                                        fieldWithPath("description").description("채용내용"),
+                                        fieldWithPath("skill").description("사용기술")
+                                )
+                ))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("id").exists())
                 .andExpect(jsonPath("companyId").value(companyId))
@@ -76,6 +108,26 @@ class RecruitmentControllerTest extends IntegrationTest {
         //then
         resultActions
                 .andDo(print())
+                .andDo(
+                        document("put-recruitment",
+                                requestFields(
+                                        fieldWithPath("position").description("채용포지션"),
+                                        fieldWithPath("reward").description("채용보상금"),
+                                        fieldWithPath("description").description("채용내용"),
+                                        fieldWithPath("skill").description("사용기술")
+                                ),
+                                responseHeaders(
+                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("content type header")
+                                ),
+                                responseFields(
+                                        fieldWithPath("id").description("채용공고 ID"),
+                                        fieldWithPath("companyId").description("회사 ID"),
+                                        fieldWithPath("position").description("채용포지션"),
+                                        fieldWithPath("reward").description("채용보상금"),
+                                        fieldWithPath("description").description("채용내용"),
+                                        fieldWithPath("skill").description("사용기술")
+                                )
+                        ))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("reward").value(reward))
                 .andExpect(jsonPath("description").value(description));
@@ -115,6 +167,21 @@ class RecruitmentControllerTest extends IntegrationTest {
         //then
         resultActions
                 .andDo(print())
+                .andDo(document(
+                        "get-recruitments",
+                        responseHeaders(
+                                headerWithName(HttpHeaders.CONTENT_TYPE).description("content type header")
+                        ),
+                        responseFields(
+                                fieldWithPath("[].id").description("채용공고 ID"),
+                                fieldWithPath("[].companyName").description("회사명"),
+                                fieldWithPath("[].nation").description("국가"),
+                                fieldWithPath("[].region").description("지역"),
+                                fieldWithPath("[].position").description("채용포지션"),
+                                fieldWithPath("[].reward").description("채용보상금"),
+                                fieldWithPath("[].skill").description("사용기술")
+                        )
+                ))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0].id").value(saveData.getId()))

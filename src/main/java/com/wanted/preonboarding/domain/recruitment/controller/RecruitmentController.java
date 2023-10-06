@@ -1,6 +1,12 @@
 package com.wanted.preonboarding.domain.recruitment.controller;
 
 import com.wanted.preonboarding.domain.recruitment.dto.*;
+import com.wanted.preonboarding.domain.recruitment.dto.request.RecruitmentPostRequestDto;
+import com.wanted.preonboarding.domain.recruitment.dto.request.RecruitmentPutRequestDto;
+import com.wanted.preonboarding.domain.recruitment.dto.response.RecruitmentGetResponseDto;
+import com.wanted.preonboarding.domain.recruitment.dto.response.RecruitmentPostResponseDto;
+import com.wanted.preonboarding.domain.recruitment.dto.response.RecruitmentPutResponseDto;
+import com.wanted.preonboarding.domain.recruitment.dto.response.RecruitmentsGetResponseDto;
 import com.wanted.preonboarding.domain.recruitment.service.RecruitmentDeleteService;
 import com.wanted.preonboarding.domain.recruitment.service.RecruitmentPostService;
 import com.wanted.preonboarding.domain.recruitment.service.RecruitmentQueryService;
@@ -11,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/recruitments")
@@ -24,7 +32,10 @@ public class RecruitmentController {
 
     @PostMapping
     public ResponseEntity<RecruitmentPostResponseDto> postRecruitment(@RequestBody RecruitmentPostRequestDto requestDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(recruitmentPostService.post(requestDto));
+        RecruitmentPostResponseDto result = recruitmentPostService.post(requestDto);
+        return ResponseEntity
+                .created(linkTo(RecruitmentController.class).slash(result.getId()).toUri())
+                .body(result);
     }
 
     @PutMapping("/{id}")

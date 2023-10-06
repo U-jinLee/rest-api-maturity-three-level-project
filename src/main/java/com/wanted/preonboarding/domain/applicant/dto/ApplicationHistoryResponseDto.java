@@ -11,11 +11,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApplicationHistoryResponseDto {
 
-    private Long recruitmentId;
-    private Long applicantId;
+    private long applicationHistoryId;
+    private long recruitmentId;
+    private long applicantId;
 
     public static ApplicationHistoryResponseDto from(ApplicationHistory applicationHistory) {
-        return new ApplicationHistoryResponseDto(applicationHistory.getRecruitmentId(), applicationHistory.getApplicantId());
+        return new ApplicationHistoryResponseDto(
+                applicationHistory.getId(),
+                applicationHistory.getRecruitmentId(),
+                applicationHistory.getApplicantId());
     }
 
 }
