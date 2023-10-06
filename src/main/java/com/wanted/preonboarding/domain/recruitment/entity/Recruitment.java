@@ -1,6 +1,6 @@
 package com.wanted.preonboarding.domain.recruitment.entity;
 
-import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentPutRequestDto;
+import com.wanted.preonboarding.domain.recruitment.dto.request.RecruitmentPutRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 

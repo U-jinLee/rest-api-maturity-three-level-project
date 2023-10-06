@@ -5,7 +5,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentSearchCondition;
 import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentVo;
-import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentsGetResponseDto;
+import com.wanted.preonboarding.domain.recruitment.dto.response.RecruitmentsGetResponseDto;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;

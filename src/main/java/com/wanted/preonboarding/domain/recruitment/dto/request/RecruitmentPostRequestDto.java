@@ -1,4 +1,4 @@
-package com.wanted.preonboarding.domain.recruitment.dto;
+package com.wanted.preonboarding.domain.recruitment.dto.request;
 
 import com.wanted.preonboarding.domain.recruitment.entity.Recruitment;
 import lombok.AccessLevel;

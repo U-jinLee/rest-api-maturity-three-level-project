@@ -1,19 +1,17 @@
 package com.wanted.preonboarding.domain.recruitment.service;
 
 import com.wanted.preonboarding.domain.company.entity.Company;
-import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentGetResponseDto;
+import com.wanted.preonboarding.domain.recruitment.dto.response.RecruitmentGetResponseDto;
 import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentSearchCondition;
 import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentVo;
-import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentsGetResponseDto;
+import com.wanted.preonboarding.domain.recruitment.dto.response.RecruitmentsGetResponseDto;
 import com.wanted.preonboarding.domain.recruitment.entity.Recruitment;
 import com.wanted.preonboarding.domain.recruitment.repository.RecruitmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)

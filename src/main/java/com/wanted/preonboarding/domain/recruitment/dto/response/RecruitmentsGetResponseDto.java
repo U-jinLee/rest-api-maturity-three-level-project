@@ -1,4 +1,4 @@
-package com.wanted.preonboarding.domain.recruitment.dto;
+package com.wanted.preonboarding.domain.recruitment.dto.response;
 
 import com.wanted.preonboarding.domain.company.entity.Company;
 import com.wanted.preonboarding.domain.recruitment.entity.Recruitment;

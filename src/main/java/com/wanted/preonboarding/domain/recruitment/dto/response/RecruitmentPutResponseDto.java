@@ -1,4 +1,4 @@
-package com.wanted.preonboarding.domain.recruitment.dto;
+package com.wanted.preonboarding.domain.recruitment.dto.response;
 
 import com.wanted.preonboarding.domain.recruitment.entity.Recruitment;
 import lombok.AccessLevel;
@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class RecruitmentPostResponseDto {
+public class RecruitmentPutResponseDto {
 
     private long id;
     private long companyId;
@@ -16,8 +16,8 @@ public class RecruitmentPostResponseDto {
     private String description;
     private String skill;
 
-    public static RecruitmentPostResponseDto from(Recruitment recruitment) {
-        return new RecruitmentPostResponseDto(recruitment.getId(),
+    public static RecruitmentPutResponseDto from(Recruitment recruitment) {
+        return new RecruitmentPutResponseDto(recruitment.getId(),
                 recruitment.getCompanyId(),
                 recruitment.getPosition(),
                 recruitment.getReward(),
