@@ -1,9 +1,9 @@
 package com.wanted.preonboarding.domain.applicant.controller;
 
 import com.wanted.preonboarding.domain.applicant.dto.ApplicationHistoryRequestDto;
+import com.wanted.preonboarding.global.IntegrationTest;
 import com.wanted.preonboarding.global.config.RestDocsConfiguration;
 import com.wanted.preonboarding.global.setup.ApplicantSetUp;
-import com.wanted.preonboarding.global.IntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
@@ -18,7 +19,8 @@ import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.li
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -42,6 +44,9 @@ class ApplicantControllerTest extends IntegrationTest {
                 .andDo(print())
                 .andDo(document(
                         "post-applicant-application-history",
+                        pathParameters(
+                                parameterWithName("applicant-id").description("지원자의 id")
+                        ),
                         requestHeaders(
                                 headerWithName(HttpHeaders.CONTENT_TYPE).description("Content-Type header"),
                                 headerWithName(HttpHeaders.CONTENT_LENGTH).description("Content-Length header")
@@ -75,7 +80,7 @@ class ApplicantControllerTest extends IntegrationTest {
     }
 
     private ResultActions requestApplicationHistory(long applicantId, ApplicationHistoryRequestDto request) throws Exception {
-        return mvc.perform(post("/api/applicants/{id}/application-histories", applicantId)
+        return mvc.perform(RestDocumentationRequestBuilders.post("/api/applicants/{applicant-id}/application-histories", applicantId)
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON));
     }

@@ -12,13 +12,12 @@ import com.wanted.preonboarding.domain.recruitment.service.RecruitmentPostServic
 import com.wanted.preonboarding.domain.recruitment.service.RecruitmentQueryService;
 import com.wanted.preonboarding.domain.recruitment.service.RecruitmentUpdateService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.LinkRelation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
@@ -41,7 +40,7 @@ public class RecruitmentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RecruitmentPutResponseDto> putRecruitment(@PathVariable("id") long id,
+    public ResponseEntity<EntityModel<RecruitmentPutResponseDto>> putRecruitment(@PathVariable("id") long id,
                                                                     @RequestBody RecruitmentPutRequestDto requestDto) {
         return ResponseEntity.status(HttpStatus.OK).body(recruitmentUpdateService.update(id, requestDto));
     }
@@ -53,12 +52,12 @@ public class RecruitmentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<RecruitmentsGetResponseDto>> getRecruitments(RecruitmentSearchCondition searchCondition) {
+    public ResponseEntity<CollectionModel<EntityModel<RecruitmentsGetResponseDto>>> getRecruitments(RecruitmentSearchCondition searchCondition) {
         return ResponseEntity.status(HttpStatus.OK).body(recruitmentQueryService.getRecruitments(searchCondition));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RecruitmentGetResponseDto> getRecruitment(@PathVariable("id") long id) {
+    public ResponseEntity<EntityModel<RecruitmentGetResponseDto>> getRecruitment(@PathVariable("id") long id) {
         return ResponseEntity.status(HttpStatus.OK).body(recruitmentQueryService.getRecruitment(id));
     }
 

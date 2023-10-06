@@ -20,3 +20,6 @@
 - 채용공고에 지원할 수 있음
   - 사용자는 1회만 지원이 가능하다
   - 채용공고 id, 사용자 id가 들어간다
+
+### Restful API
+해당 API는 Self-descriptive Message와 HATEOAS를 만족하는 RESTful API 3단계를 만족한다.

@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -22,7 +23,10 @@ import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.li
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -133,6 +137,9 @@ class RecruitmentControllerTest extends IntegrationTest {
                 .andDo(print())
                 .andDo(
                         document("put-recruitment",
+                                pathParameters(
+                                        parameterWithName("id").description("채용공고 ID")
+                                ),
                                 requestFields(
                                         fieldWithPath("position").description("채용포지션"),
                                         fieldWithPath("reward").description("채용보상금"),
@@ -148,17 +155,36 @@ class RecruitmentControllerTest extends IntegrationTest {
                                         fieldWithPath("position").description("채용포지션"),
                                         fieldWithPath("reward").description("채용보상금"),
                                         fieldWithPath("description").description("채용내용"),
-                                        fieldWithPath("skill").description("사용기술")
+                                        fieldWithPath("skill").description("사용기술"),
+                                        fieldWithPath("_links.*").ignored(),
+                                        fieldWithPath("_links.self.*").ignored(),
+                                        fieldWithPath("_links.delete.*").ignored(),
+                                        fieldWithPath("_links.queryRecruitment.*").ignored(),
+                                        fieldWithPath("_links.queryRecruitments.*").ignored(),
+                                        fieldWithPath("_links.profile.*").ignored()
+
+                                ),
+                                links(
+                                        linkWithRel("self").description("Link to self"),
+                                        linkWithRel("delete").description("Link to delete"),
+                                        linkWithRel("queryRecruitment").description("Link to query recruitment"),
+                                        linkWithRel("queryRecruitments").description("Link to query recruitments"),
+                                        linkWithRel("profile").description("Link to profile")
                                 )
                         ))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("reward").value(reward))
-                .andExpect(jsonPath("description").value(description));
+                .andExpect(jsonPath("description").value(description))
+                .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("_links.delete").exists())
+                .andExpect(jsonPath("_links.queryRecruitment").exists())
+                .andExpect(jsonPath("_links.queryRecruitments").exists())
+                .andExpect(jsonPath("_links.profile").exists());
 
     }
 
     private ResultActions requestRecruitmentPut(Recruitment recruitment, RecruitmentPutRequestDto request) throws Exception {
-        return mvc.perform(put("/api/recruitments/{id}", recruitment.getId())
+        return mvc.perform(RestDocumentationRequestBuilders.put("/api/recruitments/{id}", recruitment.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)));
     }
@@ -172,11 +198,19 @@ class RecruitmentControllerTest extends IntegrationTest {
         //then
         resultActions
                 .andDo(print())
-                .andExpect(status().isNoContent());
+                .andDo(
+                        document("delete-recruitments",
+                                pathParameters(
+                                        parameterWithName("id").description("채용공고 ID")
+                                )
+                        ))
+                .andExpect(
+                        status().isNoContent()
+                );
     }
 
     private ResultActions requestRecruitmentDelete(Recruitment recruitment) throws Exception {
-        return mvc.perform(delete("/api/recruitments/{id}", recruitment.getId()));
+        return mvc.perform(RestDocumentationRequestBuilders.delete("/api/recruitments/{id}", recruitment.getId()));
     }
 
     @Test
@@ -196,24 +230,42 @@ class RecruitmentControllerTest extends IntegrationTest {
                                 headerWithName(HttpHeaders.CONTENT_TYPE).description("content type header")
                         ),
                         responseFields(
-                                fieldWithPath("[].id").description("채용공고 ID"),
-                                fieldWithPath("[].companyName").description("회사명"),
-                                fieldWithPath("[].nation").description("국가"),
-                                fieldWithPath("[].region").description("지역"),
-                                fieldWithPath("[].position").description("채용포지션"),
-                                fieldWithPath("[].reward").description("채용보상금"),
-                                fieldWithPath("[].skill").description("사용기술")
+                                fieldWithPath("_embedded.recruitmentsGetResponseDtoList[].id").description("채용공고 ID"),
+                                fieldWithPath("_embedded.recruitmentsGetResponseDtoList[].companyName").description("회사명"),
+                                fieldWithPath("_embedded.recruitmentsGetResponseDtoList[].nation").description("국가"),
+                                fieldWithPath("_embedded.recruitmentsGetResponseDtoList[].region").description("지역"),
+                                fieldWithPath("_embedded.recruitmentsGetResponseDtoList[].position").description("채용포지션"),
+                                fieldWithPath("_embedded.recruitmentsGetResponseDtoList[].reward").description("채용보상금"),
+                                fieldWithPath("_embedded.recruitmentsGetResponseDtoList[].skill").description("사용기술"),
+                                fieldWithPath("_embedded.recruitmentsGetResponseDtoList[]._links.*").ignored(),
+                                fieldWithPath("_embedded.recruitmentsGetResponseDtoList[]._links.self.*").ignored(),
+                                fieldWithPath("_embedded.recruitmentsGetResponseDtoList[]._links.update.*").ignored(),
+                                fieldWithPath("_embedded.recruitmentsGetResponseDtoList[]._links.delete.*").ignored(),
+                                fieldWithPath("_embedded.recruitmentsGetResponseDtoList[]._links.queryRecruitments.*").ignored(),
+                                fieldWithPath("_links.*").ignored(),
+                                fieldWithPath("_links.self.*").ignored(),
+                                fieldWithPath("_links.profile.*").ignored()
+                        ),
+                        links(
+                                linkWithRel("self").description("Link to self"),
+                                linkWithRel("profile").description("Link to profile")
                         )
                 ))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0].id").value(saveData.getId()))
-                .andExpect(jsonPath("$[0].companyName").value("원티드랩"))
-                .andExpect(jsonPath("$[0].nation").value("한국"))
-                .andExpect(jsonPath("$[0].region").value("서울"))
-                .andExpect(jsonPath("$[0].position").value(saveData.getPosition()))
-                .andExpect(jsonPath("$[0].reward").value(saveData.getReward()))
-                .andExpect(jsonPath("$[0].skill").value(saveData.getSkill()));
+                .andExpect(jsonPath("_embedded.recruitmentsGetResponseDtoList").isArray())
+                .andExpect(jsonPath("_embedded.recruitmentsGetResponseDtoList[0].id").value(saveData.getId()))
+                .andExpect(jsonPath("_embedded.recruitmentsGetResponseDtoList[0].companyName").value("원티드랩"))
+                .andExpect(jsonPath("_embedded.recruitmentsGetResponseDtoList[0].nation").value("한국"))
+                .andExpect(jsonPath("_embedded.recruitmentsGetResponseDtoList[0].region").value("서울"))
+                .andExpect(jsonPath("_embedded.recruitmentsGetResponseDtoList[0].position").value(saveData.getPosition()))
+                .andExpect(jsonPath("_embedded.recruitmentsGetResponseDtoList[0].reward").value(saveData.getReward()))
+                .andExpect(jsonPath("_embedded.recruitmentsGetResponseDtoList[0].skill").value(saveData.getSkill()))
+                .andExpect(jsonPath("_embedded.recruitmentsGetResponseDtoList[0]._links.self").exists())
+                .andExpect(jsonPath("_embedded.recruitmentsGetResponseDtoList[0]._links.update").exists())
+                .andExpect(jsonPath("_embedded.recruitmentsGetResponseDtoList[0]._links.delete").exists())
+                .andExpect(jsonPath("_embedded.recruitmentsGetResponseDtoList[0]._links.queryRecruitments").exists())
+                .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("_links.profile").exists());
     }
 
     private ResultActions requestRecruitmentGets() throws Exception {
@@ -234,8 +286,7 @@ class RecruitmentControllerTest extends IntegrationTest {
         resultActions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$").isEmpty());
+                .andExpect(jsonPath("_embedded.recruitmentsGetResponseDtoList").doesNotExist());
     }
     @Test
     void 채용공고_회사_검색_성공() throws Exception {
@@ -249,14 +300,12 @@ class RecruitmentControllerTest extends IntegrationTest {
         resultActions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$").isEmpty());
+                .andExpect(jsonPath("_embedded.recruitmentsGetResponseDtoList").doesNotExist());
     }
 
 
     private ResultActions requestRecruitmentGets(String parameterName, String value) throws Exception {
-        return mvc.perform(
-                get("/api/recruitments")
+        return mvc.perform(get("/api/recruitments")
                         .param(parameterName, value)
         );
     }
@@ -274,6 +323,41 @@ class RecruitmentControllerTest extends IntegrationTest {
         //then
         resultActions
                 .andDo(print())
+                .andDo(document(
+                        "get-recruitment",
+                        pathParameters(
+                                parameterWithName("id").description("채용공고 ID")
+                        ),
+                        responseHeaders(
+                                headerWithName(HttpHeaders.CONTENT_TYPE).description("Content type header")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").description("채용공고 ID"),
+                                fieldWithPath("companyName").description("회사명"),
+                                fieldWithPath("nation").description("국가"),
+                                fieldWithPath("region").description("지역"),
+                                fieldWithPath("position").description("채용포지션"),
+                                fieldWithPath("reward").description("채용보상금"),
+                                fieldWithPath("skill").description("사용기술"),
+                                fieldWithPath("description").description("채용내용"),
+                                fieldWithPath("anotherRecruitments").description("회사의 다른 채용공고"),
+                                fieldWithPath("_links.*").ignored(),
+                                fieldWithPath("_links.self.*").ignored(),
+                                fieldWithPath("_links.update.*").ignored(),
+                                fieldWithPath("_links.delete.*").ignored(),
+                                fieldWithPath("_links.queryRecruitments.*").ignored(),
+                                fieldWithPath("_links.profile.*").ignored(),
+                                fieldWithPath("_links.queryAnotherRecruitments[].*").ignored()
+                        ),
+                        links(
+                                linkWithRel("self").description("Link to self"),
+                                linkWithRel("update").description("Link to update"),
+                                linkWithRel("delete").description("Link to delete"),
+                                linkWithRel("queryRecruitments").description("Link to query recruitments"),
+                                linkWithRel("profile").description("Link to profile"),
+                                linkWithRel("queryAnotherRecruitments").description("Link to query company's another recruitments")
+                        )
+                ))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").value(saveData.getId()))
                 .andExpect(jsonPath("companyName").value("원티드랩"))
@@ -284,13 +368,18 @@ class RecruitmentControllerTest extends IntegrationTest {
                 .andExpect(jsonPath("skill").value(saveData.getSkill()))
                 .andExpect(jsonPath("description").value(saveData.getDescription()))
                 .andExpect(jsonPath("anotherRecruitments").isArray())
-                .andExpect(jsonPath("anotherRecruitments").isNotEmpty());
+                .andExpect(jsonPath("anotherRecruitments").isNotEmpty())
+                .andExpect(jsonPath("_links.profile").exists())
+                .andExpect(jsonPath("_links.update").exists())
+                .andExpect(jsonPath("_links.delete").exists())
+                .andExpect(jsonPath("_links.queryRecruitments").exists())
+                .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("_links.queryAnotherRecruitments").isArray())
+                .andExpect(jsonPath("_links.queryAnotherRecruitments").exists());
     }
 
     private ResultActions requestRecruitmentGet(long recruitmentId) throws Exception {
-        return mvc.perform(
-                get("/api/recruitments/{id}", recruitmentId)
-        );
+        return mvc.perform(RestDocumentationRequestBuilders.get("/api/recruitments/{id}", recruitmentId));
     }
 
 }
