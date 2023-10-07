@@ -2,16 +2,14 @@ package com.wanted.preonboarding.domain.recruitment.dto.response;
 
 import com.wanted.preonboarding.domain.company.entity.Company;
 import com.wanted.preonboarding.domain.recruitment.entity.Recruitment;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class RecruitmentGetResponseDto {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class RecruitmentGetResponseDto implements RecruitmentGet {
     private long id;
     private String companyName;
     private String nation;

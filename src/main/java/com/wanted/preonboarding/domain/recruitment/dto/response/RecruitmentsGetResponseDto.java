@@ -5,7 +5,7 @@ import com.wanted.preonboarding.domain.recruitment.entity.Recruitment;
 import lombok.Getter;
 
 @Getter
-public class RecruitmentsGetResponseDto {
+public class RecruitmentsGetResponseDto implements RecruitmentGet {
     private long id;
     private String companyName;
     private String nation;

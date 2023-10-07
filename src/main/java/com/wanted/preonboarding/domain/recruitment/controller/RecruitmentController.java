@@ -3,10 +3,7 @@ package com.wanted.preonboarding.domain.recruitment.controller;
 import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentSearchCondition;
 import com.wanted.preonboarding.domain.recruitment.dto.request.RecruitmentPostRequestDto;
 import com.wanted.preonboarding.domain.recruitment.dto.request.RecruitmentPutRequestDto;
-import com.wanted.preonboarding.domain.recruitment.dto.response.RecruitmentGetResponseDto;
-import com.wanted.preonboarding.domain.recruitment.dto.response.RecruitmentPostResponseDto;
-import com.wanted.preonboarding.domain.recruitment.dto.response.RecruitmentPutResponseDto;
-import com.wanted.preonboarding.domain.recruitment.dto.response.RecruitmentsGetResponseDto;
+import com.wanted.preonboarding.domain.recruitment.dto.response.*;
 import com.wanted.preonboarding.domain.recruitment.service.RecruitmentDeleteService;
 import com.wanted.preonboarding.domain.recruitment.service.RecruitmentPostService;
 import com.wanted.preonboarding.domain.recruitment.service.RecruitmentQueryService;
@@ -51,12 +48,12 @@ public class RecruitmentController {
     }
 
     @GetMapping
-    public ResponseEntity<CollectionModel<EntityModel<RecruitmentsGetResponseDto>>> getRecruitments(RecruitmentSearchCondition searchCondition) {
+    public ResponseEntity<CollectionModel<EntityModel<RecruitmentGet>>> getRecruitments(RecruitmentSearchCondition searchCondition) {
         return ResponseEntity.status(HttpStatus.OK).body(recruitmentQueryService.getRecruitments(searchCondition));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EntityModel<RecruitmentGetResponseDto>> getRecruitment(@PathVariable("id") long id) {
+    public ResponseEntity<EntityModel<RecruitmentGet>> getRecruitment(@PathVariable("id") long id) {
         return ResponseEntity.status(HttpStatus.OK).body(recruitmentQueryService.getRecruitment(id));
     }
 
