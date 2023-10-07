@@ -23,8 +23,7 @@ import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.li
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -271,6 +270,11 @@ class RecruitmentControllerTest extends IntegrationTest {
                 .andDo(print())
                 .andDo(document(
                         "get-recruitments",
+                        queryParameters(
+                                parameterWithName("skill").description("사용기술").optional(),
+                                parameterWithName("company").description("회사명").optional()
+                        )
+                        ,
                         responseHeaders(
                                 headerWithName(HttpHeaders.CONTENT_TYPE).description("content type header")
                         ),
@@ -282,7 +286,7 @@ class RecruitmentControllerTest extends IntegrationTest {
                                 fieldWithPath("_embedded.recruitmentsGetResponseDtoList[].position").description("채용포지션"),
                                 fieldWithPath("_embedded.recruitmentsGetResponseDtoList[].reward").description("채용보상금"),
                                 fieldWithPath("_embedded.recruitmentsGetResponseDtoList[].skill").description("사용기술"),
-                                fieldWithPath("_embedded.recruitmentsGetResponseDtoList[]._links.*").ignored(),
+                                fieldWithPath("_embedded.recruitmentsGetResponseDtoList[]._links").description("Link to embedded resource"),
                                 fieldWithPath("_embedded.recruitmentsGetResponseDtoList[]._links.self.*").ignored(),
                                 fieldWithPath("_embedded.recruitmentsGetResponseDtoList[]._links.update.*").ignored(),
                                 fieldWithPath("_embedded.recruitmentsGetResponseDtoList[]._links.delete.*").ignored(),
@@ -314,8 +318,7 @@ class RecruitmentControllerTest extends IntegrationTest {
     }
 
     private ResultActions requestRecruitmentGets() throws Exception {
-        return mvc.perform(
-                get("/api/recruitments")
+        return mvc.perform(get("/api/recruitments")
         );
     }
 
@@ -330,6 +333,7 @@ class RecruitmentControllerTest extends IntegrationTest {
         //then
         resultActions
                 .andDo(print())
+                .andDo(document("get-recruitments"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("_embedded.recruitmentsGetResponseDtoList").doesNotExist());
     }

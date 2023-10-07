@@ -63,11 +63,11 @@
 [[overview-errors]]
 == 오류
 
-에러 응답이 발생했을 때 (상태 코드 >= 400), 본문에 해당 문제를 기술한 JSON 객체가 담겨있다. 에러 객체는 다음의 구조를 따른다.
+에러 응답이 발생했을 때 (상태 코드 => 400), 본문에 해당 문제를 기술한 JSON 객체가 담겨있다. 에러 객체는 다음의 구조를 따른다.
 
 include::{snippets}/errors/response-fields.adoc[]
 
-예를 들어, 잘못된 요청으로 이벤트를 만들려고 했을 때 다음과 같은 `400 Bad Request` 응답을 받는다.
+예를 들어, 잘못된 요청으로 채용 공고를 만들려고 했을 때 다음과 같은 `400 Bad Request` 응답을 받는다.
 
 include::{snippets}/errors/http-response.adoc[]
 
@@ -111,25 +111,25 @@ operation::post-recruitment[snippets='curl-request,http-request,request-fields,h
 
 `GET` 요청을 사용하여 서비스의 모든 채용을 조회할 수 있다.
 
-operation::get-recruitments[snippets='response-fields,curl-request,http-response,links']
+operation::get-recruitments[snippets='curl-request,query-parameters,http-request,http-response,response-fields,links']
 
 [[resources-recruitment-get]]
 === 채용 조회
 
 `Get` 요청을 사용해서 기존 채용 하나를 조회할 수 있다.
 
-operation::get-recruitment[snippets='path-parameters,curl-request,http-response,links']
+operation::get-recruitment[snippets='curl-request,path-parameters,http-request,http-response,response-fields,links']
 
 [[resources-recruitments-update]]
 === 채용 수정
 
 `PUT` 요청을 사용해서 기존 채용을 수정할 수 있다.
 
-operation::put-recruitment[snippets='path-parameters,request-fields,curl-request,http-response,links']
+operation::put-recruitment[snippets='curl-request,path-parameters,http-request,request-fields,http-response,response-fields,links']
 
 [[resources-recruitments-delete]]
-=== 채용 수정
+=== 채용 삭제
 
 `DELETE` 요청을 사용해서 채용을 삭제할 수 있다.
 
-operation::put-recruitment[snippets='path-parameters']
+operation::delete-recruitments[snippets='curl-request,path-parameters,http-request']
