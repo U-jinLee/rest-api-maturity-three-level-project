@@ -10,14 +10,20 @@ import lombok.Getter;
 public class RecruitmentPostResponseDto {
 
     private long id;
+
     private long companyId;
+
     private String position;
+
     private int reward;
+
     private String description;
+
     private String skill;
 
     public static RecruitmentPostResponseDto from(Recruitment recruitment) {
-        return new RecruitmentPostResponseDto(recruitment.getId(),
+        return new RecruitmentPostResponseDto(
+                recruitment.getId(),
                 recruitment.getCompanyId(),
                 recruitment.getPosition(),
                 recruitment.getReward(),
