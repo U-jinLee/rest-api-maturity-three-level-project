@@ -1,26 +1,23 @@
 package com.wanted.preonboarding.domain.applicant.service;
 
-import com.wanted.preonboarding.domain.applicant.controller.ApplicantController;
+import com.wanted.preonboarding.domain.applicant.dto.ApplicationHistoryAssembler;
 import com.wanted.preonboarding.domain.applicant.dto.ApplicationHistoryRequestDto;
 import com.wanted.preonboarding.domain.applicant.dto.ApplicationHistoryResponseDto;
 import com.wanted.preonboarding.domain.applicant.entity.Applicant;
-import com.wanted.preonboarding.domain.applicant.entity.ApplicationHistory;
 import com.wanted.preonboarding.domain.applicant.exception.AlreadyAppliedException;
 import com.wanted.preonboarding.domain.applicant.exception.ApplicantNotFoundException;
 import com.wanted.preonboarding.domain.applicant.repository.ApplicantRepository;
 import com.wanted.preonboarding.domain.applicant.repository.ApplicationHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RequiredArgsConstructor
 @Service
 public class ApplicationHistoryPostService {
 
+    private final ApplicationHistoryAssembler assembler;
     private final ApplicantRepository applicantRepository;
     private final ApplicationHistoryRepository applicationHistoryRepository;
 
@@ -31,26 +28,15 @@ public class ApplicationHistoryPostService {
         Applicant applicant = applicantRepository.findById(applicantId).orElseThrow(() ->
                 new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다: " + applicantId));
 
-        validateApplicationHistoryAlreadyExist(requestDto, applicant);
+        validateApplicationHistoryAlreadyExist(applicant, requestDto.getRecruitmentId());
 
-        ApplicationHistory applicationHistory = applicationHistoryRepository.save(
-                ApplicationHistory.builder()
-                        .applicant(applicant)
-                        .recruitmentId(requestDto.getRecruitmentId())
-                        .build()
-        );
+        return assembler.toModel(ApplicationHistoryResponseDto
+                .from(applicationHistoryRepository.save(requestDto.toEntity(applicant))));
 
-        return EntityModel.of(ApplicationHistoryResponseDto.from(applicationHistory),
-                linkTo(ApplicantController.class)
-                        .slash(applicantId)
-                        .slash("application-histories")
-                        .slash(applicationHistory.getId()).withSelfRel(),
-                Link.of("/docs/index.html#resources-applicants-id-application-histories-create")
-                        .withRel("profile"));
     }
 
-    private void validateApplicationHistoryAlreadyExist(ApplicationHistoryRequestDto requestDto, Applicant applicant) {
-        if (applicationHistoryRepository.existsByApplicantAndRecruitmentId(applicant, requestDto.getRecruitmentId()))
+    private void validateApplicationHistoryAlreadyExist(Applicant applicant, long recruitmentId) {
+        if (applicationHistoryRepository.existsByApplicantAndRecruitmentId(applicant, recruitmentId))
             throw new AlreadyAppliedException();
     }
 
