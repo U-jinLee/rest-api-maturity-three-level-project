@@ -1,6 +1,7 @@
-package com.wanted.preonboarding.domain.recruitment.dto.response;
+package com.wanted.preonboarding.domain.recruitment.dto.assembler;
 
 import com.wanted.preonboarding.domain.recruitment.controller.RecruitmentController;
+import com.wanted.preonboarding.domain.recruitment.dto.response.RecruitmentGet;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;

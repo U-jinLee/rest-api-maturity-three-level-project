@@ -1,7 +1,7 @@
 package com.wanted.preonboarding.domain.recruitment.service;
 
 import com.wanted.preonboarding.domain.recruitment.dto.request.RecruitmentPostRequestDto;
-import com.wanted.preonboarding.domain.recruitment.dto.response.RecruitmentPostAssembler;
+import com.wanted.preonboarding.domain.recruitment.dto.assembler.RecruitmentPostAssembler;
 import com.wanted.preonboarding.domain.recruitment.dto.response.RecruitmentPostResponseDto;
 import com.wanted.preonboarding.domain.recruitment.entity.Recruitment;
 import com.wanted.preonboarding.domain.recruitment.repository.RecruitmentRepository;

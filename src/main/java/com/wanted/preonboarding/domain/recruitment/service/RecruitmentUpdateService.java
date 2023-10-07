@@ -2,7 +2,7 @@ package com.wanted.preonboarding.domain.recruitment.service;
 
 import com.wanted.preonboarding.domain.recruitment.dto.request.RecruitmentPutRequestDto;
 import com.wanted.preonboarding.domain.recruitment.dto.response.RecruitmentPutResponseDto;
-import com.wanted.preonboarding.domain.recruitment.dto.response.RecruitmentUpdateAssembler;
+import com.wanted.preonboarding.domain.recruitment.dto.assembler.RecruitmentUpdateAssembler;
 import com.wanted.preonboarding.domain.recruitment.entity.Recruitment;
 import com.wanted.preonboarding.domain.recruitment.exception.RecruitmentNotFoundException;
 import com.wanted.preonboarding.domain.recruitment.repository.RecruitmentRepository;

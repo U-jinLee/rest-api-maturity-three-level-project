@@ -5,7 +5,7 @@ import com.wanted.preonboarding.domain.recruitment.controller.RecruitmentControl
 import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentSearchCondition;
 import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentVo;
 import com.wanted.preonboarding.domain.recruitment.dto.response.RecruitmentGet;
-import com.wanted.preonboarding.domain.recruitment.dto.response.RecruitmentGetAssembler;
+import com.wanted.preonboarding.domain.recruitment.dto.assembler.RecruitmentGetAssembler;
 import com.wanted.preonboarding.domain.recruitment.dto.response.RecruitmentGetResponseDto;
 import com.wanted.preonboarding.domain.recruitment.entity.Recruitment;
 import com.wanted.preonboarding.domain.recruitment.exception.RecruitmentNotFoundException;
