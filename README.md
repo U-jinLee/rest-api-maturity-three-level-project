@@ -42,18 +42,19 @@
 ![img](https://img.shields.io/badge/h2_db-59666C?style=for-the-badge&logo=querydsl&logoColor=white)
 
 ![img](https://img.shields.io/badge/JUnit5-junit5?style=for-the-badge&logo=junit5&logoColor=white)
-## Getting Started
-```shell
-./gradlew build
-cd build/libs
-java -jar wanted-preonboarding-0.0.1-SNAPSHOT.jar
-```
 
 ## Test
 ```shell
 ./gradlew test
 ```
 ![img.png](src/main/resources/static/img/test_result.png)
+
+## Getting Started
+```shell
+./gradlew bootjar
+./gradlew bootrun
+```
+
 ## Proejct Introduce
 ### TDD
 테스트 주도적인 개발을 하기 위해서 노력했다. MockMvc를 통한 통합 테스트 중심으로 통해 개발을 진행하면서 실패 -> 통과하는 코드 -> 리팩토링을 한 통과하는 코드 작성을 반복했다. 코드의 중복을 제거하고, 코드의 가독성을 높이는 것을 목표로 했다.
