@@ -5,6 +5,8 @@ import com.wanted.preonboarding.domain.applicant.dto.ApplicationHistoryRequestDt
 import com.wanted.preonboarding.domain.applicant.dto.ApplicationHistoryResponseDto;
 import com.wanted.preonboarding.domain.applicant.entity.Applicant;
 import com.wanted.preonboarding.domain.applicant.entity.ApplicationHistory;
+import com.wanted.preonboarding.domain.applicant.exception.AlreadyAppliedException;
+import com.wanted.preonboarding.domain.applicant.exception.ApplicantNotFoundException;
 import com.wanted.preonboarding.domain.applicant.repository.ApplicantRepository;
 import com.wanted.preonboarding.domain.applicant.repository.ApplicationHistoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +25,13 @@ public class ApplicationHistoryPostService {
     private final ApplicationHistoryRepository applicationHistoryRepository;
 
     @Transactional
-    public EntityModel<ApplicationHistoryResponseDto> postApplicationHistory(long applicantId, ApplicationHistoryRequestDto requestDto) {
+    public EntityModel<ApplicationHistoryResponseDto> postApplicationHistory(long applicantId,
+                                                                             ApplicationHistoryRequestDto requestDto) {
 
         Applicant applicant = applicantRepository.findById(applicantId).orElseThrow(() ->
-                new IllegalArgumentException("해당 지원자가 존재하지 않습니다: " + applicantId));
+                new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다: " + applicantId));
 
-       if (applicationHistoryRepository.existsByApplicantAndRecruitmentId(applicant, requestDto.getRecruitmentId()))
-           throw new IllegalArgumentException("이미 지원한 공고입니다: " + requestDto.getRecruitmentId());
+        validateHistoryAlreadyExist(requestDto, applicant);
 
         ApplicationHistory applicationHistory = applicationHistoryRepository.save(
                 ApplicationHistory.builder()
@@ -46,4 +48,10 @@ public class ApplicationHistoryPostService {
                 Link.of("/docs/index.html#resources-applicants-id-application-histories-create")
                         .withRel("profile"));
     }
+
+    private void validateHistoryAlreadyExist(ApplicationHistoryRequestDto requestDto, Applicant applicant) {
+        if (applicationHistoryRepository.existsByApplicantAndRecruitmentId(applicant, requestDto.getRecruitmentId()))
+            throw new AlreadyAppliedException();
+    }
+
 }

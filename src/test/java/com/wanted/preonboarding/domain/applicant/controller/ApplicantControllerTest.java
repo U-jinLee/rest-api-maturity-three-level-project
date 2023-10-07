@@ -1,9 +1,12 @@
 package com.wanted.preonboarding.domain.applicant.controller;
 
 import com.wanted.preonboarding.domain.applicant.dto.ApplicationHistoryRequestDto;
+import com.wanted.preonboarding.domain.applicant.entity.Applicant;
+import com.wanted.preonboarding.domain.applicant.entity.ApplicationHistory;
 import com.wanted.preonboarding.global.IntegrationTest;
 import com.wanted.preonboarding.global.config.RestDocsConfiguration;
 import com.wanted.preonboarding.global.setup.ApplicantSetUp;
+import com.wanted.preonboarding.global.setup.ApplicationHistorySetUp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -29,12 +32,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ApplicantControllerTest extends IntegrationTest {
     @Autowired
     ApplicantSetUp applicantSetUp;
+    @Autowired
+    ApplicationHistorySetUp applicationHistorySetUp;
 
     @Test
     void 채용공고_지원_성공() throws Exception {
         //given
         Long applicantId = applicantSetUp.save().getId();
-        ApplicationHistoryRequestDto request = ApplicationHistoryRequestDto.of(0);
+        ApplicationHistoryRequestDto request = ApplicationHistoryRequestDto.from(0L);
 
         //when
         ResultActions resultActions = requestApplicationHistory(applicantId, request);
@@ -78,6 +83,29 @@ class ApplicantControllerTest extends IntegrationTest {
                 .andExpect(jsonPath("_links.self").exists())
                 .andExpect(jsonPath("_links.profile").exists());
     }
+
+    @Test
+    void 이미_지원한_채용공고_지원() throws Exception {
+        //given
+        Applicant applicant = applicantSetUp.save();
+        long recruitmentId = 0L;
+        ApplicationHistory applicationHistory = applicationHistorySetUp.save(applicant, recruitmentId);
+
+        ApplicationHistoryRequestDto request = ApplicationHistoryRequestDto.from(recruitmentId);
+
+        //when
+        ResultActions resultActions = requestApplicationHistory(applicant.getId(), request);
+
+        //then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("message").exists())
+                .andExpect(jsonPath("status").exists())
+                .andExpect(jsonPath("errors").exists())
+                .andExpect(jsonPath("code").exists());
+    }
+
 
     private ResultActions requestApplicationHistory(long applicantId, ApplicationHistoryRequestDto request) throws Exception {
         return mvc.perform(RestDocumentationRequestBuilders.post("/api/applicants/{applicant-id}/application-histories", applicantId)
