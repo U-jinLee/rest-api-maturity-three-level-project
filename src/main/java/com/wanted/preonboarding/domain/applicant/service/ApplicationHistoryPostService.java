@@ -31,7 +31,7 @@ public class ApplicationHistoryPostService {
         Applicant applicant = applicantRepository.findById(applicantId).orElseThrow(() ->
                 new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다: " + applicantId));
 
-        validateHistoryAlreadyExist(requestDto, applicant);
+        validateApplicationHistoryAlreadyExist(requestDto, applicant);
 
         ApplicationHistory applicationHistory = applicationHistoryRepository.save(
                 ApplicationHistory.builder()
@@ -49,7 +49,7 @@ public class ApplicationHistoryPostService {
                         .withRel("profile"));
     }
 
-    private void validateHistoryAlreadyExist(ApplicationHistoryRequestDto requestDto, Applicant applicant) {
+    private void validateApplicationHistoryAlreadyExist(ApplicationHistoryRequestDto requestDto, Applicant applicant) {
         if (applicationHistoryRepository.existsByApplicantAndRecruitmentId(applicant, requestDto.getRecruitmentId()))
             throw new AlreadyAppliedException();
     }

@@ -40,7 +40,7 @@ public class RecruitmentController {
 
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<RecruitmentPutResponseDto>> putRecruitment(@PathVariable("id") long id,
-                                                                    @RequestBody RecruitmentPutRequestDto requestDto) {
+                                                                                 @RequestBody RecruitmentPutRequestDto requestDto) {
         return ResponseEntity.status(HttpStatus.OK).body(recruitmentUpdateService.update(id, requestDto));
     }
 

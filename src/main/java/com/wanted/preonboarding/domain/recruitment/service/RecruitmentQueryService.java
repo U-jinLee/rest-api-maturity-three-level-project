@@ -7,6 +7,7 @@ import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentSearchConditio
 import com.wanted.preonboarding.domain.recruitment.dto.RecruitmentVo;
 import com.wanted.preonboarding.domain.recruitment.dto.response.RecruitmentsGetResponseDto;
 import com.wanted.preonboarding.domain.recruitment.entity.Recruitment;
+import com.wanted.preonboarding.domain.recruitment.exception.RecruitmentNotFoundException;
 import com.wanted.preonboarding.domain.recruitment.repository.RecruitmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
@@ -31,14 +32,14 @@ public class RecruitmentQueryService {
 
         List<EntityModel<RecruitmentsGetResponseDto>> recruitmentResource = recruitmentRepository.findRecruitments(searchCondition).stream()
                 .map(
-                recruitmentRes -> EntityModel.of(
-                        recruitmentRes,
-                        linkTo(RecruitmentController.class).slash(recruitmentRes.getId()).withSelfRel(),
-                        linkTo(RecruitmentController.class).slash(recruitmentRes.getId()).withRel("update"),
-                        linkTo(RecruitmentController.class).slash(recruitmentRes.getId()).withRel("delete"),
-                        linkTo(RecruitmentController.class).withRel("queryRecruitments")
-                )
-        ).toList();
+                        recruitmentRes -> EntityModel.of(
+                                recruitmentRes,
+                                linkTo(RecruitmentController.class).slash(recruitmentRes.getId()).withSelfRel(),
+                                linkTo(RecruitmentController.class).slash(recruitmentRes.getId()).withRel("update"),
+                                linkTo(RecruitmentController.class).slash(recruitmentRes.getId()).withRel("delete"),
+                                linkTo(RecruitmentController.class).withRel("queryRecruitments")
+                        )
+                ).toList();
 
         return CollectionModel.of(recruitmentResource,
                 linkTo(RecruitmentController.class).withSelfRel(),
@@ -49,7 +50,7 @@ public class RecruitmentQueryService {
 
     public EntityModel<RecruitmentGetResponseDto> getRecruitment(long id) {
         RecruitmentVo recruitmentVo = recruitmentRepository.findRecruitmentBy(id).orElseThrow(() ->
-                new IllegalArgumentException("해당하는 채용 공고가 없습니다." + id));
+                new RecruitmentNotFoundException("해당하는 채용 공고가 없습니다." + id));
 
         Recruitment recruitment = recruitmentVo.getRecruitment();
         Company company = recruitmentVo.getCompany();

@@ -4,6 +4,7 @@ import com.wanted.preonboarding.domain.recruitment.controller.RecruitmentControl
 import com.wanted.preonboarding.domain.recruitment.dto.request.RecruitmentPutRequestDto;
 import com.wanted.preonboarding.domain.recruitment.dto.response.RecruitmentPutResponseDto;
 import com.wanted.preonboarding.domain.recruitment.entity.Recruitment;
+import com.wanted.preonboarding.domain.recruitment.exception.RecruitmentNotFoundException;
 import com.wanted.preonboarding.domain.recruitment.repository.RecruitmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.EntityModel;
@@ -21,8 +22,9 @@ public class RecruitmentUpdateService {
 
     @Transactional
     public EntityModel<RecruitmentPutResponseDto> update(long id, RecruitmentPutRequestDto requestDto) {
+
         Recruitment recruitment = recruitmentRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
+                new RecruitmentNotFoundException("해당 채용공고를 찾을 수 없습니다: " + id));
 
         recruitment.update(requestDto);
 

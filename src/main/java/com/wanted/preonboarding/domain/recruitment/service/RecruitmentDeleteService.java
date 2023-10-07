@@ -1,5 +1,7 @@
 package com.wanted.preonboarding.domain.recruitment.service;
 
+import com.wanted.preonboarding.domain.recruitment.entity.Recruitment;
+import com.wanted.preonboarding.domain.recruitment.exception.RecruitmentNotFoundException;
 import com.wanted.preonboarding.domain.recruitment.repository.RecruitmentRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +15,10 @@ public class RecruitmentDeleteService {
 
     @Transactional
     public void delete(long id) {
-        recruitmentRepository.deleteById(id);
+        Recruitment recruitment = recruitmentRepository.findById(id).orElseThrow(() -> new
+                RecruitmentNotFoundException("해당 채용공고를 찾을 수 없습니다: " + id));
+
+        recruitmentRepository.delete(recruitment);
     }
 
 }
