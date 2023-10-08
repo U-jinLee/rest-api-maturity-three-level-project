@@ -108,4 +108,4 @@ JPA는 객체 그래프 탐색을 통해 연관 탐색을 계속 진행할 수 �
 
 문서화에 사용할 도구를 Swagger와 Restdocs 둘 중 많은 고민을 했지만 코드에 영향을 주지않고 테스트 주도적으로 문서화를 진행할 수 있는 Restdocs를 선택했다. Restdocs를 사용하기 위해선 Spring HATEOAS를 사용해야 했고, HATEOAS를 사용하기 위해선 Restful API를 만족해야 했다. 따라서, 해당 API는 Self-descriptive Message와 HATEOAS를 만족하는 RESTful API 3단계이다.
 
-프로젝트를 배포 후, http://localhost:8080/docs/index.html 로 접속하면 Restdocs를 통해 API 문서를 확인할 수 있다. 혹은,[여기](src/main/resources/static/docs/example/index.html)를 클릭해 해당 Restdocs를 다운받아 볼 수 있습니다.
+프로젝트를 배포 후, http://localhost:8080/docs/index.html 로 접속하면 Restdocs를 통해 API 문서를 확인할 수 있다. 혹은, [**여기**](https://rest-docs.s3.ap-northeast-2.amazonaws.com/index.html)를 클릭해 해당 Restdocs를 볼 수 있습니다.
