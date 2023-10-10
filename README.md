@@ -24,7 +24,7 @@
   - 사용자는 1회만 지원이 가능하다
   - 채용공고 id, 사용자 id가 들어간다
 
-## Statcks
+## Stacks
 ### Enviroment
 ![img](https://img.shields.io/badge/intellij_idea-000000?style=for-the-badge&logo=intellijidea&logoColor=white)
 ![img](https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white)
@@ -55,7 +55,7 @@
 ./gradlew bootrun
 ```
 
-## Proejct Introduce
+## Project Introduce
 ### TDD
 테스트 주도적인 개발을 하기 위해서 노력했다. MockMvc를 통한 통합 테스트 중심으로 통해 개발을 진행하면서 실패 -> 통과하는 코드 -> 리팩토링을 한 통과하는 코드 작성을 반복했다. 코드의 중복을 제거하고, 코드의 가독성을 높이는 것을 목표로 했다.
 
