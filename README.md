@@ -1,7 +1,8 @@
-# Wanted pre onboarding backend
-### 과제 설명
-채용 사이트의 REST API를 구성하는 것이 목표이며, `Spring Restdocs`와 `Spring Hateoas`를 통해 Restful API 3단계를 충족하는 API를 만드는 것을 목표로 함.
-채용 사이트의 주요 기능은 다음과 같습니다.
+# Rest api maturity three level project
+### 프로젝트 설명
+`Spring Restdocs`와 `Spring Hateoas`를 통해 Restful API 성숙도 3단계를 충족하는 API를 만드는 것을 목표로 합니다.
+
+
 
 #### 요구 사항
 **회사**
