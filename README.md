@@ -1,18 +1,29 @@
 # Rest api maturity three level project
 ## 프로젝트 설명
-`Spring Restdocs`와 `Spring Hateoas`를 통해 Restful API 성숙도 3단계를 충족하는 API를 만드는 것을 목표로 합니다.
-
-
+`Spring Restdocs`와 `Spring Hateoas`를 통해 RESTful API 성숙도 3단계를 충족하는 API를 만드는 것을 목표로 합니다.<br>
+RESTful API 성숙도 3단계란, Self-descriptive Message와 HATEOAS를 만족하는 RESTful API를 의미하며 아래의 링크를 통해 정확한 예시를 확인할 수 있습니다.<br>
+[**Richardson Maturity Model - Click**](https://martinfowler.com/articles/richardsonMaturityModel.html#level3)
 
 ### 요구 사항
+RESTful API를 구현하기 위해 선정한 도메인은 `채용공고`, `지원자`, `회사`이며,<br>
+각 도메인의 요구사항은 아래와 같습니다.
+
 **회사**
+<details>
+<summary>회사 도메인 요구사항 확인 - click</summary>
+
 - 회사는 채용공고를 생성할 수 있음
   - 채용공고는 회사ID, 포지션, 보상금, 내용, 사용기술을 포함함
 - 채용 공고를 수정할 수 있음
   - 회사 ID를 제외하고 모두 수정이 가능하다
 - 채용 공고를 삭제할 수 있음
 
-**사용자**
+</details>
+
+**지원자**
+<details>
+<summary>지원자 도메인 요구사항 확인 - click</summary>
+
 - 채용공고의 목록을 가져올 수 있음
 - 회사명, 사용기술을 통해 채용공고의 검색할 수 있음
 - 채용 상세 페이지를 가져올 수 있음
@@ -21,6 +32,8 @@
 - 채용공고에 지원할 수 있음
   - 사용자는 1회만 지원이 가능하다
   - 채용공고 id, 사용자 id가 들어간다
+
+</details>
 
 ## Stacks
 ### Enviroment
@@ -45,6 +58,7 @@
 ```shell
 ./gradlew test
 ```
+> ![Static Badge](https://img.shields.io/badge/Test_Passed-14/14-green)<br/>
 ![img.png](src/main/resources/static/img/test_result.png)
 
 ## Getting Started

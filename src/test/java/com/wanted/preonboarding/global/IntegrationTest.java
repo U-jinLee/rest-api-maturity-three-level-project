@@ -1,7 +1,7 @@
 package com.wanted.preonboarding.global;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wanted.preonboarding.WantedPreOnboardingBackendApplication;
+import com.wanted.preonboarding.RestApiMaturityThreeLevelApplication;
 import jakarta.transaction.Transactional;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -15,7 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = WantedPreOnboardingBackendApplication.class)
+@SpringBootTest(classes = RestApiMaturityThreeLevelApplication.class)
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @Transactional
