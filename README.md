@@ -1,10 +1,10 @@
 # Rest api maturity three level project
-### 프로젝트 설명
+## 프로젝트 설명
 `Spring Restdocs`와 `Spring Hateoas`를 통해 Restful API 성숙도 3단계를 충족하는 API를 만드는 것을 목표로 합니다.
 
 
 
-#### 요구 사항
+### 요구 사항
 **회사**
 - 회사는 채용공고를 생성할 수 있음
   - 채용공고는 회사ID, 포지션, 보상금, 내용, 사용기술을 포함함
