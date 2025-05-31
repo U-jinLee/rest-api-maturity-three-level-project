@@ -1,16 +1,15 @@
 # Rest api maturity three level project
-## 프로젝트 설명
-`Spring Restdocs`와 `Spring Hateoas`를 통해 RESTful API 성숙도 3단계를 충족하는 API를 만드는 것을 목표로 합니다.<br>
-RESTful API 성숙도 3단계란, Self-descriptive Message와 HATEOAS를 만족하는 RESTful API를 의미하며 아래의 링크를 통해 정확한 예시를 확인할 수 있습니다.<br>
+## 프로젝트 구현 설명
+`Spring Restdocs`와 `Spring Hateoas`를 통해 RESTful API 성숙도 3단계를 충족하는 API를 만드는 것을 목표로 합니다. RESTful API 성숙도 3단계란, `Self-descriptive Message`와 `HATEOAS`를 만족하는 `RESTful API`를 의미하며 아래의 링크를 통해 자세한 정보를 확인할 수 있습니다.
+
 [**Richardson Maturity Model - Click**](https://martinfowler.com/articles/richardsonMaturityModel.html#level3)
 
-### 요구 사항
-RESTful API를 구현하기 위해 선정한 도메인은 `채용공고`, `지원자`, `회사`이며,<br>
-각 도메인의 요구사항은 아래와 같습니다.
+### 프로젝트 요구사항 가정
+RESTful API를 구현하기 위해 선정한 도메인은 `채용공고`, `지원자`, `회사`이며, 각 도메인의 요구사항은 아래와 같습니다.
 
 **회사**
 <details>
-<summary>회사 도메인 요구사항 확인 - click</summary>
+<summary>회사 요구사항 확인 - click</summary>
 
 - 회사는 채용공고를 생성할 수 있음
   - 채용공고는 회사ID, 포지션, 보상금, 내용, 사용기술을 포함함
@@ -22,7 +21,7 @@ RESTful API를 구현하기 위해 선정한 도메인은 `채용공고`, `지�
 
 **지원자**
 <details>
-<summary>지원자 도메인 요구사항 확인 - click</summary>
+<summary>지원자 요구사항 확인 - click</summary>
 
 - 채용공고의 목록을 가져올 수 있음
 - 회사명, 사용기술을 통해 채용공고의 검색할 수 있음
@@ -35,7 +34,7 @@ RESTful API를 구현하기 위해 선정한 도메인은 `채용공고`, `지�
 
 </details>
 
-## Stacks
+## 사용한 기술스택
 ### Enviroment
 ![img](https://img.shields.io/badge/intellij_idea-000000?style=for-the-badge&logo=intellijidea&logoColor=white)
 ![img](https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white)
@@ -54,7 +53,7 @@ RESTful API를 구현하기 위해 선정한 도메인은 `채용공고`, `지�
 
 ![img](https://img.shields.io/badge/JUnit5-junit5?style=for-the-badge&logo=junit5&logoColor=white)
 
-## Test
+## 구현 서비스 테스트 결과
 ```shell
 ./gradlew test
 ```
@@ -67,11 +66,11 @@ RESTful API를 구현하기 위해 선정한 도메인은 `채용공고`, `지�
 ./gradlew bootrun
 ```
 
-## Project Introduce
+## 프로젝트 구현 중점사항
 ### TDD
-테스트 주도적인 개발을 하기 위해서 노력했다. MockMvc를 통한 통합 테스트 중심으로 통해 개발을 진행하면서 실패 -> 통과하는 코드 -> 리팩토링을 한 통과하는 코드 작성을 반복했다. 코드의 중복을 제거하고, 코드의 가독성을 높이는 것을 목표로 했다.
+MockMvc를 통한 통합 테스트 중심으로 통해 개발을 진행하면서 `RED -> GREEN -> REFACTOR` 순서를 지키는 코드 작성을 반복했습니다.
 
-### Tree
+### Project Tree
 ``` 
 ├─main
 │  ├─java
